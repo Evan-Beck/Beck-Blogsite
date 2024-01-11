@@ -7,9 +7,13 @@
         {{#each userPosts as |post|}}
         <div>
        <h4>{{post.title}}</h4>
-                <p>{{post.content}}</p>
-                <a href="/posts/edit/{{post.id}}">Edit</a> <!-- Link to edit the post. -->
-                <a href="/posts/delete/{{post.id}}">Delete</a> <!-- Link to delete the post. -->
+        <p>{{post.content}}</p>
+        <a href="/posts/edit/{{post.id}}">Edit</a> <!-- Link to edit the post. -->
+                {{!-- <a href="/posts/delete/{{post.id}}">Delete</a> <!-- Link to delete the post. --> --}}
+            <form action="/posts/{{post.id}}" method="POST">
+             <input type="hidden" name="_method" value="DELETE"> <!-- Needed for DELETE request. -->
+                <button type="submit">Delete Post</button>
+         </form>
             </div>
         {{/each}}
     </div>

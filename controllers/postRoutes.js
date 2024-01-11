@@ -5,7 +5,7 @@ const { Post } = require('../models');
 router.get('/', async (req, res) => {
     try {
         const posts = await Post.findAll();
-        res.status(200).json(posts);
+        res.render('posts', { posts }); 
     } catch (err) {
         res.status(400).json(err);
     }
@@ -16,9 +16,9 @@ router.post('/', async (req, res) => {
         const newPost = await Post.create({
             title: req.body.title,
             content: req.body.content,
-            userId: req.body.userId  // Assuming userID is passed in request
+            userId: req.session.userId  // Assuming userID is passed in request
         });
-        res.status(200).json(newPost);
+        res.redirect('/posts');
     } catch (err) {
         res.status(400).json(err);
     }
@@ -33,28 +33,24 @@ router.put('/:id', async (req, res) => {
                 content: req.body.content
             },
             {
-                where: {
-                    id: req.params.id
-                }
+                where: { id: req.params.id }
             }
         );
-
         if (updatedPost[0] > 0) {
-            res.status(200).json({ message: 'Post updated successfully' });
+            res.redirect('/posts/' + req.params.id);
         } else {
-            res.status(404).json({ message: 'Post not found' });
+            res.status(404).send('Post not found');
         }
     } catch (err) {
         res.status(500).json(err);
     }
 });
+
 // Route to delete a post. 
 router.delete('/:id', async (req, res) => {
     try {
         const deletedPost = await Post.destroy({
-            where: {
-                id: req.params.id
-            }
+            where: { id: req.params.id }
         });
 
         if (deletedPost) {
