@@ -10,5 +10,17 @@
             <p>{{comment.author}}: {{comment.content}}</p>
         </div>
         {{/each}}
+
+{{#if loggedIn}}
+<form action="/posts/{{post.id}}/comments" method="POST">
+<div>
+    <label> for="content">Add a comment:</label>
+    <textarea id="content" name="content" required></textarea>
+</div>
+<button type="submit">Submit Comment</button>
+</form>
+{{else}}
+            <p><a href="/login">Log in</a> to post a comment.</p>
+        {{/if}}
     </div>
 </div>

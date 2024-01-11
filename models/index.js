@@ -1,6 +1,6 @@
 const User = require ('./User');
 const Post = require('./Post');
-const Comment = require('.Comment');
+const Comment = require('./Comment');
 
 // User-Post associations. Each user can have multiple posts, belonging to that user due to the one-to-many relationship.
 User.hasMany(Post, {

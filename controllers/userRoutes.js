@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User} = reqiure('../models');
+const {User} = require('../models');
 const bcrypt = require('bcrypt');
 
 router.post('/register', async (req, res) => {
@@ -19,19 +19,21 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ where: { username: req.body.username } });
         if (!user) {
-            res.status(400).json({ message: 'User not found!' });
-            return;
-    } 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
+            return res.status(400).json({ message: 'User not found' });
+        } 
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-        res.status(400).json({ message: 'Invalid password!' });
-        return;
+        return res.status(400).json({ message: 'Invalid password' });
     }
-    res.status(200).json({ message: 'You are now logged in!' });
-} catch (err) {
-    res.status(400).json(err);
-}
+    req.session.userId = user.id;
+
+    res.status(200).json({ message: 'You are now logged in' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'An error occurred during login' });
+    }
 });
+
 router.post('/logout', (req, res) => {
     if (req.session) {
         // Destroy the session and handle the result.
@@ -47,6 +49,22 @@ router.post('/logout', (req, res) => {
     } else {
         // If there is no session, simply respond that the user is logged out.
         res.status(200).json({ message: 'You are already logged out' });
+    }
+});
+
+router.put('/profile', async (req, res) => {
+    try {
+        const updatedUser = await User.update(req.body, {
+            where: { id: req.session.userId }
+        });
+
+        if (updatedUser[0]) {
+            res.status(200).json({ message: 'Profile updated successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).json(err);
     }
 });
 

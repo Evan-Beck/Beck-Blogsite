@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require('seqeulize'); // Importing Model class and DataTypes from Sequelize.
-const seqeuelize = require ('../config/connection'); // Importing the sequelize connection from connection.js.
+const { Model, DataTypes } = require('sequelize'); // Importing Model class and DataTypes from Sequelize.
+const sequelize = require ('../config/connection'); // Importing the sequelize connection from connection.js.
 
 class Comment extends Model {} // Comment class that extends Sequelize's Model class.
 

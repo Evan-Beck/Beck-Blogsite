@@ -1,0 +1,22 @@
+/* Style for navigation bar. */
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px 0;
+    text-align: left;
+    height: 25%;
+}
+
+.navbar a {
+    color: white;
+    padding: 14px 20px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+
