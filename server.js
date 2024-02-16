@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const sequelize = require('./config/connection');
+const path = require('path');
 // Imports sequelize connection.
 
 const app = express();
@@ -12,7 +13,7 @@ const hbs = exphbs.create({});
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware
 app.use(express.json());
@@ -36,11 +37,23 @@ app.use(routes);
 // app.use('/users', userRoutes);
 // app.use('/posts', postRoutes);
 // app.use(commentRoutes);
-
-app.get('/', (req, res) => {
-  res.render('home', { title: "The Tech Blog" }); // Replace with your actual homepage template
+app.get('/login', (req, res) => {
+  console.log('Reached /login route');
+  res.render('login');
 });
 
+app.get('/dashboard', (req, res) => {
+  console.log('Reached /dashboard route');
+  res.render('dashboard'); 
+});
+
+app.get('/posts/new', (req, res) => {
+  console.log('Reached /posts/new route');
+});
+
+app.get('/', (req, res) => {
+  res.render('home', { title: "The Tech Blog" }); // Replaced with homepage template.
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

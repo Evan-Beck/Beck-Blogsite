@@ -17,22 +17,27 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({ where: { username: req.body.username } });
+        const { username, password } = req.body;
+        const user = await User.findOne({ where: { username } });
+
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
         } 
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-        return res.status(400).json({ message: 'Invalid password' });
-    }
-    req.session.userId = user.id;
 
-    res.status(200).json({ message: 'You are now logged in' });
+        const validPassword = await bcrypt.compare(password, user.password);
+
+        if (!validPassword) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+        req.session.userId = user.id;
+
+        res.status(200).json({ message: 'You are now logged in' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'An error occurred during login' });
     }
 });
+
 
 router.post('/logout', (req, res) => {
     if (req.session) {
